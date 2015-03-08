@@ -10,8 +10,9 @@
 
 (define-values (blog-dispatch blog-url)
   (dispatch-rules
+   [("") blog-list-posts]
    [("posts" (string-arg) (string-arg) (string-arg) (string-arg)) blog-review-post]
-   [else blog-list-posts]))
+   [else default-page]))
 
 (define (blog-list-posts req)
   (posts-list (get-posts-info)))
@@ -20,6 +21,13 @@
   (let-values ([(title time content) (get-post-detail year month day post-title)])
     (response/xexpr
      (make-cdata #f #f (include-template "post.html")))))
+
+(define (default-page req)
+  (response/full
+   200 #"Okay"
+   (current-seconds) TEXT/HTML-MIME-TYPE
+   empty
+   (list (string->bytes/utf-8 (include-template "404.html")))))
 
 (define (posts-list elements)
   (response/xexpr

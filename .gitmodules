@@ -1,9 +1,0 @@
-[submodule "externals/markdown"]
-	path = externals/markdown
-	url = git@github.com:greghendershott/markdown.git
-[submodule "externals/rackjure"]
-	path = externals/rackjure
-	url = git@github.com:greghendershott/rackjure.git
-[submodule "externals/parsack"]
-	path = externals/parsack
-	url = git@github.com:greghendershott/parsack.git

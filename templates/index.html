@@ -29,11 +29,9 @@
 <hr>
 
 <table>
-    @for/list[([e elements])]{
-        @list{
-            <tr><td><a href=@(car e)>@(cddr e)</a></td><td align="right">@(cadr e)</td></tr>
-        }
-    }
+    {% for item in posts %}
+    <tr><td><a href="{{ item.href }}">{{ item.caption }}</a></td><td align="right">{{ item.post_time }}</td></tr>
+    {% endfor %}
 </table>
 
 </body>

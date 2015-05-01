@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request
 from post import get_posts_list, get_post_content
+from flask import Flask, render_template, request
+from werkzeug.contrib.atom import AtomFeed
 from mobile.sniffer.detect import detect_mobile_browser
 
 import sys
@@ -28,6 +29,7 @@ def index():
 def post(year, month, day, post_name):
     post_time = year + '-' + month + '-' + day
     content = get_post_content(posts_dir, post_time, post_name)
+
     if content:
         mobile = 'mobile_' if is_mobile_request() else ''
         return render_template('post.html',
@@ -49,9 +51,25 @@ def css(css_file):
 def image(image_file):
     return blog.send_static_file('images/' + image_file)
 
+@blog.route('/recent.atom')
+def feed():
+    atom_feed = AtomFeed('airtrack\'s Blog', feed_url = request.url)
+
+    for post in get_posts_list(posts_dir):
+        title = post['caption']
+        url = post['href']
+        post_time = post['post_time']
+        updated = post['date_time']
+        content = get_post_content(posts_dir, post_time, title)
+
+        atom_feed.add(title, content, content_type = 'html',
+                author = 'airtrack', url = url, updated = updated)
+
+    return atom_feed.get_response()
+
 @blog.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
 
 if __name__ == '__main__':
-    blog.run(host = '0.0.0.0', port = 80)
+    blog.run(host = '127.0.0.1', port = 8080, debug = True)

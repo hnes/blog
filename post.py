@@ -22,7 +22,7 @@ def get_post_content(dir, post_time, post_name):
     if not os.path.exists(file_name):
         return None
     output = StringIO.StringIO()
-    markdown.markdownFromFile(input = file_name, output = output)
+    markdown.markdownFromFile(input = file_name, output = output, extensions = ['markdown.extensions.tables'])
     content = output.getvalue()
     output.close()
     return content

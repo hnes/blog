@@ -29,7 +29,7 @@
 <a href="/about.html"><font color="CornflowerBlue">ABOUT</font></a>
 <hr>
 
-<table>
+<table class="index">
     {% for item in posts %}
     <tr><td><a href="{{ item.href }}">{{ item.caption }}</a></td><td align="right">{{ item.post_time }}</td></tr>
     {% endfor %}

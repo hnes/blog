@@ -82,6 +82,12 @@ a {
     text-decoration: none;
 }
 
+.post a {
+    color: Black;
+    border-bottom: 1px solid Silver;
+    padding-bottom: 1px;
+}
+
 pre {
     font-family: Consolas, Monaco, "Courier New", Courier, monospace;
     font-size: 70%;

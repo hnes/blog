@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import string
 from post import get_posts_list, get_post_content
 from flask import Flask, render_template, request
 from werkzeug.contrib.atom import AtomFeed
@@ -19,29 +20,30 @@ def is_mobile_request():
     else:
         return False
 
+def get_mobile_prefix():
+    return 'mobile_' if is_mobile_request() else ''
+
 @blog.route('/')
 def index():
-    mobile = 'mobile_' if is_mobile_request() else ''
     return render_template('index.html',
-            mobile = mobile, posts = get_posts_list(posts_dir))
+            mobile = get_mobile_prefix(),
+            posts = get_posts_list(posts_dir))
 
 @blog.route('/posts/<year>/<month>/<day>/<post_name>/')
 def post(year, month, day, post_name):
-    post_time = year + '-' + month + '-' + day
+    post_time = string.join([year, month, day], '-')
     content = get_post_content(posts_dir, post_time, post_name)
 
     if content:
-        mobile = 'mobile_' if is_mobile_request() else ''
         return render_template('post.html',
-                mobile = mobile, title = post_name,
+                mobile = get_mobile_prefix(), title = post_name,
                 time = post_time, content = content)
     else:
         return render_template('404.html'), 404
 
 @blog.route('/about.html')
 def about():
-    mobile = 'mobile_' if is_mobile_request() else ''
-    return render_template('about.html', mobile = mobile)
+    return render_template('about.html', mobile = get_mobile_prefix())
 
 @blog.route('/<css_file>.css')
 def css(css_file):
